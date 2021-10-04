@@ -35,8 +35,7 @@
   "Return complete document string after LaTeX conversion.
 CONTENTS is the transcoded string. INFO is a plist
 holding export options."
-  (let ((title (org-export-data (plist-get info :title) info))
-	(subtitle (org-export-data (plist-get info :subtitle) info)))
+  (let ((title (org-export-data (plist-get info :title) info)))
     (concat
      ;; Time-stamp.
      (and (plist-get info :time-stamp-file)
@@ -79,17 +78,8 @@ holding export options."
      (let ((date (and (plist-get info :with-date) (org-export-get-date info))))
        (format "\\date{%s}\n" (org-export-data date info)))
      ;; Title and subtitle.
-     (let* ((subtitle (plist-get info :subtitle))
-	    (formatted-subtitle
-	     (when subtitle
-	       (format (plist-get info :latex-subtitle-format)
-		       (org-export-data subtitle info))))
-	    (separate (plist-get info :latex-subtitle-separate)))
-       (concat
-	(format "\\title{%s%s}\n" title
-		(if separate "" (or formatted-subtitle "")))
-	(when (and separate subtitle)
-	  (concat formatted-subtitle "\n"))))
+     (concat
+      (format "\\title{%s}\n" title))
      ;; Hyperref options.
      (let ((template (plist-get info :latex-hyperref-template)))
        (and (stringp template)
